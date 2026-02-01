@@ -3,36 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Team Active Status</title>
+    <title>TG Team Live Status</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .dashboard { width: 100%; max-width: 800px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #f8f9fa; color: #555; }
-        .status-dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; animation: blink 1.5s infinite; }
-        .online { background-color: #2ecc71; }
-        .emoji { font-size: 1.2rem; margin-right: 10px; }
-        .reply-time { font-weight: bold; color: #3498db; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e6eff5; display: flex; justify-content: center; padding: 10px; }
+        .tg-container { width: 100%; max-width: 450px; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #0088cc; color: white; padding: 15px; text-align: center; font-size: 1.2rem; font-weight: bold; }
+        .member-row { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-right: 15px; }
+        .info { flex: 1; }
+        .name { font-weight: bold; color: #222; margin-bottom: 2px; }
+        .status { font-size: 0.85rem; color: #0088cc; font-weight: 500; }
+        .typing-dot { animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <h2>Team Activity Monitor</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Member & Emoji</th>
-                <th>Status</th>
-                <th>Avg. Reply Speed</th>
-            </tr>
-        </thead>
-        <tbody id="team-list">
-            </tbody>
-    </table>
+<div class="tg-container">
+    <div class="header">Telegram Team Status</div>
+    <div id="team-list"></div>
 </div>
 
 <script>
@@ -47,27 +36,28 @@
         { name: "Ikka", emoji: "✅" }
     ];
 
-    function loadTeam() {
+    function updateStatus() {
         const list = document.getElementById('team-list');
         list.innerHTML = "";
         
         team.forEach(member => {
-            // Fake random reply speed for demo (You can connect API here)
-            const randomMinutes = Math.floor(Math.random() * 5) + 1; 
+            // Randomly showing 'typing' or 'online' to look real
+            const isTyping = Math.random() > 0.7; 
+            const statusText = isTyping ? "typing<span class='typing-dot'>...</span>" : "online";
             
-            const row = `<tr>
-                <td><span class="emoji">${member.emoji}</span> <strong>${member.name}</strong></td>
-                <td><span class="status-dot online"></span> Active Now</td>
-                <td class="reply-time">~${randomMinutes} mins</td>
-            </tr>`;
-            list.innerHTML += row;
+            list.innerHTML += `
+                <div class="member-row">
+                    <div class="avatar">${member.emoji}</div>
+                    <div class="info">
+                        <div class="name">${member.name}</div>
+                        <div class="status">${statusText}</div>
+                    </div>
+                </div>`;
         });
     }
 
-    // Refresh data every 30 seconds
-    setInterval(loadTeam, 30000);
-    loadTeam();
+    setInterval(updateStatus, 5000); // 5 सेकंड में स्टेटस बदलेगा
+    updateStatus();
 </script>
-
 </body>
 </html>
